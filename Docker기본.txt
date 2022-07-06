@@ -1,0 +1,160 @@
+# 도커를 쓰는 이유?
+
+# 도커란 무엇인가?
+
+# 도커 이미지와 도커 컨테이너 정의
+
+
+# 도커 설치잘됬나 확인 
+C:\Users\yunaj>docker version
+'''
+Client:
+ Cloud integration: v1.0.24
+ Version:           20.10.17
+.....
+ Engine:
+  Version:          20.10.17
+  API version:      1.41 (minimum) 
+
+'''
+
+# 도커 흐름 훝어보기 
+ - helloworld 이미지 만들기
+
+ '''
+ C:\Users\yunaj>docker run hello-world
+
+Unable to find image 'hello-world:latest' locally  
+--> hello-world 이미지가 없습니다
+
+latest: Pulling from library/hello-world
+2db29710123e: Pull complete
+Digest: sha256:13e367d31ae85359f42d637adf6da428f76d75dc9afeb3c21faea0d976f5c651
+Status: Downloaded newer image for hello-world:latest
+--> hello-world이미지를 가지고 왔습니다
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal. 
+    ....
+
+'''
+
+# 도커에서 컨데이너란?
+
+
+# C-group, 네임스페이스를 도커 환경에서 쓸 수 있는 이유는?!
+
+
+# 도커 이미지 내부 파일 구조 
+'''
+
+C:\Users\yunaj>docker run alpine ls
+--> docker : 도커 클라이언트 언급 // run : 컨테이너 생성 및 실행 // 이미지 : 컨테이너 이미지 // ls : 이미지의 기본 시작 명령어 대신 실행할 명령어(ls: 파일목록)
+
+
+Unable to find image 'alpine:latest' locally
+latest: Pulling from library/alpine
+2408cc74d12b: Pull complete
+Digest: sha256:686d8c9dfa6f3ccfc8230bc3178d23f84eeaf7e457f36f271ab1acc53015037c
+Status: Downloaded newer image for alpine:latest
+bin
+dev
+etc
+home
+....................  
+
+'''
+
+# hello-world 이미지는 파일을 가지고 있지 않기 때문에 오류남
+
+C:\Users\yunaj>docker run hello-world ls
+
+docker: Error response from daemon: failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: exec: "ls": executable file not found in $PATH: unknown.
+
+'''
+
+# 컨테이너들 나열하기 
+2개의 cmd 켜기 
+1개는 명령어&상태 check 
+또 다른 1개는 ping보내기 
+
+- ## 현재 실행중인 container 
+--> 아무것도 없음
+C:\Users\yunaj>docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+
+C:\Users\yunaj>docker container ls
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+--> 아무것도 없음
+---------------------------------------------------------------- 
+- 현재 local 저장에 있는 image들 보기 
+C:\Users\yunaj>docker images
+REPOSITORY    TAG       IMAGE ID       CREATED        SIZE
+alpine        latest    e66264b98777   6 weeks ago    5.53MB
+hello-world   latest    feb5d9fea6a5   9 months ago   13.3kB
+
+
+
+----------------------------------------------------------------------- 
+## alpine 이미지를 실행시켜보자 
+C:\Users\yunaj>docker run alpine ping localhost 
+
+64 bytes from 127.0.0.1: seq=305 ttl=64 time=0.049 ms
+64 bytes from 127.0.0.1: seq=306 ttl=64 time=0.043 ms
+64 bytes from 127.0.0.1: seq=307 ttl=64 time=0.040 ms
+64 bytes from 127.0.0.1: seq=308 ttl=64 time=0.043 ms
+64 bytes from 127.0.0.1: seq=309 ttl=64 time=0.079 ms
+64 bytes from 127.0.0.1: seq=310 ttl=64 time=0.044 ms
+64 bytes from 127.0.0.1: seq=311 ttl=64 time=0.050 ms
+64 bytes from 127.0.0.1: seq=312 ttl=64 time=0.044 ms
+64 bytes from 127.0.0.1: seq=313 ttl=64 time=0.058 ms
+64 bytes from 127.0.0.1: seq=314 ttl=64 time=0.056 ms
+
+................
+
+
+cf. ping이란?
+--> 호스트와 패킷을 서로 주고받는 과정
+-----------------------------------------------------------------------
+C:\Users\yunaj>docker ps
+CONTAINER ID   IMAGE     COMMAND            CREATED         STATUS         PORTS     NAMES
+de4e8b68e12e   alpine    "ping localhost"   5 minutes ago   Up 5 minutes             nostalgic_lamport
+
+-----------------------------------------------------------------------
+
+docker container ls -a
+--> 실행 중인 컨테이너뿐만 아니라 종료된 컨테이너도 모두 표시
+
+CONTAINER ID   IMAGE         COMMAND            CREATED             STATUS                         PORTS     NAMES
+6fb8667a46f5   alpine        "ping localhost"   38 minutes ago      Exited (137) 15 minutes ago              tender_elgamal
+3df830b6bfe0   alpine        "ping localhost"   47 minutes ago      Exited (137) 15 minutes ago              amazing_khorana
+d9872a2f1821   hello-world   "ls"               55 minutes ago      Created                                  gracious_gauss
+8f4b499426dc   alpine        "ls"               About an hour ago   Exited (0) About an hour ago             objective_poitras
+e4467a78f528   hello-world   "ls"               About an hour ago   Created                                  brave_mendel
+dcbf1b34e4c9   hello-world   "ls"               About an hour ago   Created                                  practical_germain
+fb11783b1f7c   hello-world   "/hello"           About an hour ago   Exited (0) About an hour ago             interesting_mirzakhani
+1d4ee7dba6dd   hello-world   "/hello"           2 hours ago         Exited (0) 2 hours ago                   boring_matsumoto
+----------------------------------------------------------------------- 
+## 특정 항목만 보기 
+
+C:\Users\yunaj>docker ps --format "table {{.Names}}\t{{.Image}}"
+NAMES               IMAGE
+nostalgic_lamport   alpine
+-----------------------------------------------------------------------
+## 도커 중지시키기 
+
+C:\Users\yunaj>docker stop de4e8b68e12e
+de4e8b68e12e
+
+C:\Users\yunaj>docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMESㄴ
